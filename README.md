@@ -27,6 +27,36 @@
 - Adding a new market means configuring a language, not forking the code. The seventh market shipped on the same engine.
 - Dictionaries grow every day with no manual work.
 
+## Lessons learned
+
+- **Give each room one owner.** Running every room in its own Durable Object removed race conditions between players without database locks.
+- **Use AI where it's cheapest to be wrong.** Dictionary lookups handle the common answers quickly, cheaply and predictably. AI only judges the long tail of unusual ones.
+- **Make the market a config file.** Treating language as configuration is what let the seventh market ship on the same engine instead of a fork.
+- **Automate content, but gate it.** The daily dictionary pipeline only works because a quality gate decides what ships.
+- **Write down deliberate trade-offs.** Room codes as the only access control is a conscious choice for a public party game, and it's documented as one.
+
+## FAQ
+
+### How do multiplayer rooms stay in sync?
+
+Each room is a single Cloudflare Durable Object that holds the authoritative game state, timer and scoring. Players on iOS, Android and web connect to it over WebSockets.
+
+### Do players need an account?
+
+No. Players join with a room code. For a public party game that's a deliberate trade-off in favor of zero friction.
+
+### How is AI used in the game?
+
+Only as a fallback. Answers are checked against a curated per-language dictionary first, and AI helps with edge cases the dictionary doesn't cover. Offensive words are filtered server-side.
+
+### How long does it take to launch a new language?
+
+Days rather than months, because a new market is configuration plus a dictionary, not a fork of the code.
+
+### Can you build a real-time multiplayer app or game for my business?
+
+Yes. I'm a mobile app developer and DevOps engineer based in Tirana, Albania, building real-time apps on iOS, Android, web and the edge for clients across the Balkans and Europe. [Email me about your project](mailto:kovacirexhino@gmail.com?subject=Project%20inquiry).
+
 ## Read more
 
 - [Architecture and key decisions](docs/architecture.md)
